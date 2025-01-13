@@ -2,11 +2,10 @@
 
 pointerManager::pointerManager(QObject *parent, Display *mdisplay) : QObject(parent),display(mdisplay)
 {
-//    display = XOpenDisplay(nullptr);
-//    if(display == nullptr)
-//    {
-//        qDebug()<<" Not opening!!";
-//    }
+    if(display == nullptr)
+    {
+        qDebug()<<" Not opening!!";
+    }
 
     root = DefaultRootWindow(display);
 
@@ -19,7 +18,6 @@ pointerManager::pointerManager(QObject *parent, Display *mdisplay) : QObject(par
 pointerManager::~pointerManager()
 {
     XCloseDisplay(display);
-
 }
 
 bool pointerManager::moveMousePointer(int dist, pointerManager::mDir direction)
@@ -34,26 +32,26 @@ bool pointerManager::moveMousePointer(int dist, pointerManager::mDir direction)
     case UP:
         new_x = event.xbutton.x_root ;
         new_y = event.xbutton.y_root- dist;
-//        qDebug()<< "Pointer moved up !!";
+                        DEBUG_MSG("Pointer moved up !!");
 
         break;
     case DOWN:
         new_x = event.xbutton.x_root ;
         new_y = event.xbutton.y_root + dist;
-//        qDebug()<< "Pointer moved down !!";
+                DEBUG_MSG("Pointer moved down !!");
         break;
     case RIGHT: // right
         new_x = event.xbutton.x_root + dist ;
         new_y = event.xbutton.y_root ;
-//        qDebug()<< "Pointer moved right !!";
+        //        DEBUG_MSG("Pointer moved right !!");
         break;
     case LEFT: // left
         new_x = event.xbutton.x_root - dist ;
         new_y = event.xbutton.y_root ;
-//        qDebug()<< "Pointer moved left !!";
+        //        DEBUG_MSG("Pointer moved left !!");
         break;
     default:
-//        qDebug()<<"no input direcetion given !!";
+        //        DEBUG_MSG( "no input direcetion given !!");
         break;
     }
 
