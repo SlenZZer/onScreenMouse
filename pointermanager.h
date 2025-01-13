@@ -46,6 +46,7 @@ public:
     ~KeyLogger() { requestInterruption(); wait(); }
 
 protected:
+    bool _isEnabled = false;
     void run() override {
         Display *display = XOpenDisplay(nullptr);
         if (!display) {
@@ -66,18 +67,27 @@ protected:
                 if (keyMap[byte] & (1 << bit)) {
                     KeySym keySym = XKeycodeToKeysym(display, i, 0);
 
-                    if (keySym == XK_Left) {
-                         pM->moveMousePointer(10,pointerManager::mDir::LEFT);
-//                         qDebug() << "RIGHT ARROW PRESSED";
-                    } else if (keySym == XK_Right) {
-                        pM->moveMousePointer(10,pointerManager::mDir::RIGHT);
-//                        qDebug() << "RIGHT ARROW PRESSED";
-                    } else if (keySym == XK_Up) {
-                        pM->moveMousePointer(10,pointerManager::mDir::UP);
-//                        qDebug() << "UP ARROW PRESSED";
-                    } else if (keySym == XK_Down) {
-                        pM->moveMousePointer(10,pointerManager::mDir::DOWN);
-//                        qDebug() << "DOWN ARROW PRESSED";
+
+                    if (keySym == XK_a || keySym == XK_A ) {
+                        qDebug() << "Letter a or A is pressed !!";
+                        _isEnabled = !_isEnabled;
+                    }
+
+                    if(_isEnabled)
+                    {
+                        if (keySym == XK_Left) {
+                            pM->moveMousePointer(10,pointerManager::mDir::LEFT);
+                            //                         qDebug() << "RIGHT ARROW PRESSED";
+                        } else if (keySym == XK_Right) {
+                            pM->moveMousePointer(10,pointerManager::mDir::RIGHT);
+                            //                        qDebug() << "RIGHT ARROW PRESSED";
+                        } else if (keySym == XK_Up) {
+                            pM->moveMousePointer(10,pointerManager::mDir::UP);
+                            //                        qDebug() << "UP ARROW PRESSED";
+                        } else if (keySym == XK_Down) {
+                            pM->moveMousePointer(10,pointerManager::mDir::DOWN);
+                            //                        qDebug() << "DOWN ARROW PRESSED";
+                        }
                     }
                 }
             }
