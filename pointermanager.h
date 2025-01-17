@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
+#include <X11/extensions/XTest.h>
 
 #ifdef QT_DEBUG
     #define DEBUG_MSG(msg) qDebug() << msg
@@ -22,6 +23,10 @@ public:
         DOWN = 1,
         RIGHT = 2,
         LEFT = 3,
+        RIGHT_CLK = 4,
+        LEFT_CLK = 5,
+        SCR_UP = 6,
+        SCR_DOWN = 7
     };
 
     explicit pointerManager(QObject *parent , Display *display);

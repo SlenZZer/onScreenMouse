@@ -14,6 +14,11 @@ public:
 
 protected:
     bool _isEnabled = false;
+    bool _exiting = false;
     void run() override;
+
+signals:
+    void killRequested();
+
 };
 #endif // APPMANAGER_H
