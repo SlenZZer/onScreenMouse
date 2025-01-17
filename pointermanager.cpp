@@ -50,13 +50,36 @@ bool pointerManager::moveMousePointer(int dist, pointerManager::mDir direction)
         new_y = event.xbutton.y_root ;
         //        DEBUG_MSG("Pointer moved left !!");
         break;
+    case LEFT_CLK: // left
+        XTestFakeButtonEvent(display, 1, True, CurrentTime);  // Press left button
+        XTestFakeButtonEvent(display, 1, False, CurrentTime); // Release left button
+        DEBUG_MSG("Left click triggered !!");
+        break;
+    case RIGHT_CLK:
+        XTestFakeButtonEvent(display, 3, True, CurrentTime);  // Press right button
+        XTestFakeButtonEvent(display, 3, False, CurrentTime); // Release right button
+        DEBUG_MSG("Right click triggered !!");
+        break;
+
+    case SCR_UP:
+        XTestFakeButtonEvent(display, 4, True, CurrentTime);  // Scroll up
+        XTestFakeButtonEvent(display, 4, False, CurrentTime); // Stop scroll
+        DEBUG_MSG("Scroll up triggered !!");
+        break;
+
+    case SCR_DOWN:
+        XTestFakeButtonEvent(display, 5, True, CurrentTime);  // Scroll down
+        XTestFakeButtonEvent(display, 5, False, CurrentTime); // Stop scroll
+        DEBUG_MSG("Scroll down triggered !!");
+        break;
     default:
         //        DEBUG_MSG( "no input direcetion given !!");
         break;
     }
 
-    // Set new pointer position
-    XWarpPointer(display, None, root, 0, 0, 0, 0, new_x, new_y);
+    // Move pointer to the new position only if a direction was given
+    if (direction != LEFT_CLK && direction != RIGHT_CLK && direction != SCR_UP && direction != SCR_DOWN)
+        XWarpPointer(display, None, root, 0, 0, 0, 0, new_x, new_y);
     XFlush(display);
 
     return true;
