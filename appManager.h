@@ -3,7 +3,7 @@
 
 #include <QThread>
 #include "pointermanager.h"
-
+#define initDist 20
 class appManager : public QThread{
     Q_OBJECT
 

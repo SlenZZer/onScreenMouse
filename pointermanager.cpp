@@ -1,6 +1,6 @@
 #include "pointermanager.h"
 
-pointerManager::pointerManager(QObject *parent, Display *mdisplay) : QObject(parent),display(mdisplay)
+pointerManager::pointerManager(QObject *parent, Display *mdisplay) : QObject(parent),display(mdisplay),duration(0),oldChange(0.0)
 {
     if(display == nullptr)
     {
@@ -20,8 +20,22 @@ pointerManager::~pointerManager()
     XCloseDisplay(display);
 }
 
-bool pointerManager::moveMousePointer(int dist, pointerManager::mDir direction)
+bool pointerManager::moveMousePointer(float dist, pointerManager::mDir direction)
 {
+    end = std::chrono::steady_clock::now();
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - st).count();
+
+
+    if(firstcall)
+    {
+        oldChange = dist;
+    }
+    firstcall = false;
+
+    float newChange = calculateSmoothMovement(oldChange, duration);
+    oldChange = newChange;
+
+    qDebug()<<">>>"<<oldChange<<", "<<duration;
 
     //Get current pointer position
     XQueryPointer(display, root, &event.xbutton.root, &event.xbutton.window,
@@ -31,22 +45,22 @@ bool pointerManager::moveMousePointer(int dist, pointerManager::mDir direction)
     switch (direction) {
     case UP:
         new_x = event.xbutton.x_root ;
-        new_y = event.xbutton.y_root- dist;
-                        DEBUG_MSG("Pointer moved up !!");
+        new_y = event.xbutton.y_root- newChange;
+        DEBUG_MSG("Pointer moved up !!");
 
         break;
     case DOWN:
         new_x = event.xbutton.x_root ;
-        new_y = event.xbutton.y_root + dist;
-                DEBUG_MSG("Pointer moved down !!");
+        new_y = event.xbutton.y_root + newChange;
+        DEBUG_MSG("Pointer moved down !!");
         break;
     case RIGHT: // right
-        new_x = event.xbutton.x_root + dist ;
+        new_x = event.xbutton.x_root + newChange ;
         new_y = event.xbutton.y_root ;
         //        DEBUG_MSG("Pointer moved right !!");
         break;
     case LEFT: // left
-        new_x = event.xbutton.x_root - dist ;
+        new_x = event.xbutton.x_root - newChange ;
         new_y = event.xbutton.y_root ;
         //        DEBUG_MSG("Pointer moved left !!");
         break;
@@ -73,7 +87,7 @@ bool pointerManager::moveMousePointer(int dist, pointerManager::mDir direction)
         DEBUG_MSG("Scroll down triggered !!");
         break;
     default:
-        //        DEBUG_MSG( "no input direcetion given !!");
+        DEBUG_MSG( "no input direcetion given !!");
         break;
     }
 
@@ -81,6 +95,14 @@ bool pointerManager::moveMousePointer(int dist, pointerManager::mDir direction)
     if (direction != LEFT_CLK && direction != RIGHT_CLK && direction != SCR_UP && direction != SCR_DOWN)
         XWarpPointer(display, None, root, 0, 0, 0, 0, new_x, new_y);
     XFlush(display);
-
+    st = std::chrono::steady_clock::now();
     return true;
+}
+
+float pointerManager::calculateSmoothMovement(float oldChange, int durationMs, float maxAcceleration, float maxDeceleration)
+{
+    if(durationMs<150 )
+        return (oldChange > 100)?oldChange:oldChange + 2;
+    else
+        return 10;
 }

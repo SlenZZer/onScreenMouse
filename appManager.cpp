@@ -57,40 +57,40 @@ void appManager::run()
                 if(_isEnabled)
                 {
                     if (keySym == XK_Left) {
-                        pM->moveMousePointer(10,pointerManager::mDir::LEFT);
+                        pM->moveMousePointer(initDist,pointerManager::mDir::LEFT);
                         //                         qDebug() << "RIGHT ARROW PRESSED";
                     } else if (keySym == XK_Right) {
-                        pM->moveMousePointer(10,pointerManager::mDir::RIGHT);
+                        pM->moveMousePointer(initDist,pointerManager::mDir::RIGHT);
                         //                        qDebug() << "RIGHT ARROW PRESSED";
                     } else if (keySym == XK_Up) {
-                        pM->moveMousePointer(10,pointerManager::mDir::UP);
+                        pM->moveMousePointer(initDist,pointerManager::mDir::UP);
                         //                        qDebug() << "UP ARROW PRESSED";
                     } else if (keySym == XK_Down) {
-                        pM->moveMousePointer(10,pointerManager::mDir::DOWN);
+                        pM->moveMousePointer(initDist,pointerManager::mDir::DOWN);
                         //                        qDebug() << "DOWN ARROW PRESSED";
                     }
 
                     if (upRightPressed)
                     {
-                        pM->moveMousePointer(10,pointerManager::mDir::RIGHT_CLK);
+                        pM->moveMousePointer(initDist,pointerManager::mDir::RIGHT_CLK);
 //                        qDebug() << "Left button clicked !!";
                     }
 
                     if (upLeftPressed)
                     {
-                        pM->moveMousePointer(10,pointerManager::mDir::LEFT_CLK);
+                        pM->moveMousePointer(initDist,pointerManager::mDir::LEFT_CLK);
 //                        qDebug() << "Left button clicked !!";
                     }
 
                     if (rightDownPressed)
                     {
-                        pM->moveMousePointer(10,pointerManager::mDir::SCR_UP);
+                        pM->moveMousePointer(initDist,pointerManager::mDir::SCR_UP);
 //                        qDebug() << "Left button clicked !!";
                     }
 
                     if (LeftDownPressed)
                     {
-                        pM->moveMousePointer(10,pointerManager::mDir::SCR_DOWN);
+                        pM->moveMousePointer(initDist,pointerManager::mDir::SCR_DOWN);
 //                        qDebug() << "Left button clicked !!";
                     }
                 }
